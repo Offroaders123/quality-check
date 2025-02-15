@@ -39,6 +39,9 @@ for orig_file in "$ORIGINAL_DIR"/*.m4a; do
     # Remux the new AAC stream into the original container with metadata
     ffmpeg -i "$OUTPUT_DIR/$base.temp.m4a" -i "$OUTPUT_DIR/$base.metadata" -map_metadata 1 -c copy -y "$output_file"
 
+    # Preserve original file timestamps
+    touch -r "$orig_file" "$output_file"
+
     # Clean up temporary files
     rm "$OUTPUT_DIR/$base.temp.m4a" "$OUTPUT_DIR/$base.metadata"
 
