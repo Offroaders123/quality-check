@@ -22,13 +22,14 @@ for (const file1 of files1) {
     const names2 = files2.map((file) => getSongName(file));
     const matches = stringSimilarity.findBestMatch(file1, names2);
     const bestMatchIndex = matches.bestMatchIndex;
+    // console.log(file1, matches, bestMatchIndex);
 
-    if (matches.bestMatch.rating > 0.5) { // Adjust threshold as needed
+    if (matches.bestMatch.rating > 0.2) { // Adjust threshold as needed
         const oldFilePath = path.join(folder2, files2[bestMatchIndex]);
         const ext = path.extname(files2[bestMatchIndex]);
         const newFilePath = path.join(folder2, `${file1}${ext}`);
 
-        fs.renameSync(oldFilePath, newFilePath);
+        // fs.renameSync(oldFilePath, newFilePath);
         console.log(`Renamed: ${files2[bestMatchIndex]} -> ${file1}${ext}`);
     } else {
         console.log(`No close match found for: ${file1}`);
