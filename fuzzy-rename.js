@@ -5,11 +5,17 @@ const fs = require("fs");
 const path = require("path");
 const stringSimilarity = require("string-similarity");
 
-const [folder1, folder2] = process.argv.slice(2);
+const [folder1, folder2, _yes] = process.argv.slice(2);
 
-if (!folder1 || !folder2) {
-    console.error("Usage: ./fuzzy-rename.js <source> <destination>");
+const yes = typeof _yes === "string";
+
+if (!folder1 || !folder2 || yes && _yes !== "-y") {
+    console.error("Usage: ./fuzzy-rename.js <source> <destination> [-y]");
     process.exit(1);
+}
+
+if (!yes) {
+    console.log("dry run (pass '-y' to rename)");
 }
 
 // Get file names without extensions
@@ -29,7 +35,7 @@ for (const file1 of files1) {
         const ext = path.extname(files2[bestMatchIndex]);
         const newFilePath = path.join(folder2, `${file1}${ext}`);
 
-        // fs.renameSync(oldFilePath, newFilePath);
+        if (yes) fs.renameSync(oldFilePath, newFilePath);
         console.log(`Renamed: ${files2[bestMatchIndex]} -> ${file1}${ext}`);
     } else {
         console.log(`No close match found for: ${file1}`);
