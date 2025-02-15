@@ -23,10 +23,15 @@ const getSongName = (/** @type {string} */ filename) => path.parse(filename).nam
 
 const files1 = fs.readdirSync(folder1).map((file) => getSongName(file));
 const files2 = fs.readdirSync(folder2);
+const files2Names = files2.map((file) => getSongName(file));
 
 for (const file1 of files1) {
-    const names2 = files2.map((file) => getSongName(file));
-    const matches = stringSimilarity.findBestMatch(file1, names2);
+    if (files2Names.includes(file1)) {
+        console.log(`Skipping: ${file1} (already correctly named)`);
+        continue;
+    }
+    
+    const matches = stringSimilarity.findBestMatch(file1, files2Names);
     const bestMatchIndex = matches.bestMatchIndex;
     // console.log(file1, matches, bestMatchIndex);
 
