@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Ensure correct usage
+if [[ $# -ne 3 ]]; then
+    echo "Usage: $0 <original_aac_dir> <lossless_dir> <output_dir>"
+    exit 1
+fi
+
 # Ensure ffmpeg is installed
 if ! command -v ffmpeg &> /dev/null; then
     echo "ffmpeg is not installed. Please install it before running this script."
@@ -7,10 +13,11 @@ if ! command -v ffmpeg &> /dev/null; then
 fi
 
 # Input and output directories
-ORIGINAL_DIR="original_aac_files"   # Directory containing original AAC files with metadata
-LOSSLESS_DIR="lossless_files"       # Directory containing lossless source files (e.g., FLAC/WAV)
-OUTPUT_DIR="reencoded_files"        # Directory where new AAC files will be stored
+ORIGINAL_DIR="$1"   # Directory containing original AAC files with metadata
+LOSSLESS_DIR="$2"   # Directory containing lossless source files (e.g., FLAC/WAV)
+OUTPUT_DIR="$3"     # Directory where new AAC files will be stored
 
+# Ensure output directory exists
 mkdir -p "$OUTPUT_DIR"
 
 # Loop through each original AAC file
