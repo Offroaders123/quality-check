@@ -5,8 +5,12 @@ const fs = require("fs");
 const path = require("path");
 const stringSimilarity = require("string-similarity");
 
-const folder1 = "path/to/folder1"; // Replace with actual path
-const folder2 = "path/to/folder2"; // Replace with actual path
+const [folder1, folder2] = process.argv.slice(2);
+
+if (!folder1 || !folder2) {
+    console.error("Usage: ./fuzzy-rename.js <source> <destination>");
+    process.exit(1);
+}
 
 // Get file names without extensions
 const getSongName = (/** @type {string} */ filename) => path.parse(filename).name;
