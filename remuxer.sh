@@ -40,11 +40,11 @@ for orig_file in "$ORIGINAL_DIR"/*.m4a; do
     # Re-encode the lossless file to AAC 256kbps and remux into .m4a
     afconvert -f m4af -d aac -s 3 -ue vbrq 127 -q 127 "$lossless_file" "$OUTPUT_DIR/$base.temp.m4a"
 
-    # Remux the new AAC stream into the original container with metadata
-    ffmpeg -i "$orig_file" -i "$OUTPUT_DIR/$base.temp.m4a" \
-    # copies all global metadata from in.m4a to out.m4a
-    -map 0:1 -map_metadata 0 \
+    # Remux the new AAC stream into the original container with metadata,
+    # copies all global metadata from in.m4a to out.m4a, and
     # copies audio stream metadata from in.m4a to out.m4a
+    ffmpeg -i "$orig_file" -i "$OUTPUT_DIR/$base.temp.m4a" \
+    -map 0:1 -map_metadata 0 \
     -map 1:a -c copy \
     "$output_file"
 
@@ -52,7 +52,7 @@ for orig_file in "$ORIGINAL_DIR"/*.m4a; do
     touch -r "$orig_file" "$output_file"
 
     # Clean up temporary files
-    # rm "$OUTPUT_DIR/$base.temp.m4a"
+    rm "$OUTPUT_DIR/$base.temp.m4a"
 
     echo "Finished processing $filename"
 done
