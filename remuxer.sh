@@ -41,18 +41,18 @@ for orig_file in "$ORIGINAL_DIR"/*.m4a; do
     ffmpeg -i "$lossless_file" -map a:0 -c:a libfdk_aac -b:a 256k -movflags +faststart -y "$OUTPUT_DIR/$base.temp.m4a"
 
     # Remux the new AAC stream into the original container with metadata
-    ffmpeg -i "$orig_file" -i "$OUTPUT_DIR/$base.temp.m4a" -map 1:a -c copy \
+    ffmpeg -i "$orig_file" -i "$OUTPUT_DIR/$base.temp.m4a" \
     # copies all global metadata from in.m4a to out.m4a
-    -map_metadata 0 \
+    -map 0:1 -map_metadata 0 \
     # copies audio stream metadata from in.m4a to out.m4a
-    -map_metadata:s:a 0:s:a \
+    -map 1:a -c copy \
     "$output_file"
 
     # Preserve original file timestamps
     touch -r "$orig_file" "$output_file"
 
     # Clean up temporary files
-    rm "$OUTPUT_DIR/$base.temp.m4a"
+    # rm "$OUTPUT_DIR/$base.temp.m4a"
 
     echo "Finished processing $filename"
 done
