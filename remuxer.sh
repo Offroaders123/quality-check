@@ -37,20 +37,24 @@ for orig_file in "$ORIGINAL_DIR"/*.m4a; do
 
     echo "Processing $filename..."
 
-    # Extract metadata from the original file
-    ffmpeg -i "$orig_file" -map_metadata 0 -f ffmetadata "$OUTPUT_DIR/$base.metadata"
-
     # Re-encode the lossless file to AAC 256kbps and remux into .m4a
     ffmpeg -i "$lossless_file" -c:a libfdk_aac -b:a 256k -movflags +faststart -y "$OUTPUT_DIR/$base.temp.m4a"
 
     # Remux the new AAC stream into the original container with metadata
-    ffmpeg -i "$OUTPUT_DIR/$base.temp.m4a" -i "$OUTPUT_DIR/$base.metadata" -map_metadata 1 -c copy -y "$output_file"
+    ffmpeg -i "$orig_file" -i "$OUTPUT_DIR/$base.temp.m4a" -map 1 -c copy \
+    # copies all global metadata from in.m4a to out.m4a
+    -map_metadata 0 \
+    # copies video stream metadata from in.m4a to out.m4a
+    -map_metadata:s:v 0:s:v \
+    # copies audio stream metadata from in.m4a to out.m4a
+    -map_metadata:s:a 0:s:a \
+    "$output_file"
 
     # Preserve original file timestamps
     touch -r "$orig_file" "$output_file"
 
     # Clean up temporary files
-    rm "$OUTPUT_DIR/$base.temp.m4a" "$OUTPUT_DIR/$base.metadata"
+    rm "$OUTPUT_DIR/$base.temp.m4a"
 
     echo "Finished processing $filename"
 done
