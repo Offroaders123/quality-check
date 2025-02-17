@@ -38,7 +38,7 @@ for orig_file in "$ORIGINAL_DIR"/*.m4a; do
     echo "Processing $filename..."
 
     # Re-encode the lossless file to AAC 256kbps and remux into .m4a
-    ffmpeg -i "$lossless_file" -map a:0 -c:a libfdk_aac -b:a 256k -movflags +faststart -y "$OUTPUT_DIR/$base.temp.m4a"
+    afconvert -f m4af -d aac -s 3 -ue vbrq 127 -q 127 "$lossless_file" "$OUTPUT_DIR/$base.temp.m4a"
 
     # Remux the new AAC stream into the original container with metadata
     ffmpeg -i "$orig_file" -i "$OUTPUT_DIR/$base.temp.m4a" \
