@@ -28,9 +28,8 @@ OUTPUT_DIR="$2"     # Directory where new AAC files will be stored
 # Ensure output directory exists
 mkdir -p "$OUTPUT_DIR"
 
-# Loop through each original AAC file
+# Loop through each FLAC file
 for lossless_file in "$LOSSLESS_DIR"/*.flac; do
-    [ -e "$lossless_file" ] || continue
 
     filename=$(basename -- "$lossless_file")
     base="${filename%.*}"
