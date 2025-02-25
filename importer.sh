@@ -53,7 +53,7 @@ for lossless_file in "$LOSSLESS_DIR"/*.flac; do
     touch -r "$lossless_file" "$output_file"
 
     # Clean up temporary files
-    # rm "$OUTPUT_DIR/$base.temp.m4a"
+    rm "$OUTPUT_DIR/$base.temp.m4a"
 
     echo "Finished processing $filename"
 done
