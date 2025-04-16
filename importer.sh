@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This one is specifically for new downloads from Bandcamp, from FLAC files to M4A.
+# This one is specifically for new downloads from Bandcamp, from ALAC M4A files to AAC M4A.
 # So I don't yet have the ones with custom tagging to worry about.
 
 # Ensure correct usage
@@ -29,7 +29,7 @@ OUTPUT_DIR="$2"     # Directory where new AAC files will be stored
 mkdir -p "$OUTPUT_DIR"
 
 # Loop through each FLAC file
-for lossless_file in "$LOSSLESS_DIR"/*.flac; do
+for lossless_file in "$LOSSLESS_DIR"/*.m4a; do
 
     filename=$(basename -- "$lossless_file")
     base="${filename%.*}"
